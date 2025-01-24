@@ -1,6 +1,7 @@
 package com.ugb.holamundo;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -56,6 +57,19 @@ public class MainActivity extends Activity {
                     tempVal = findViewById(R.id.lblRespuesta);
                     tempVal.setText("error: " + e.getMessage());
                 }
+            }
+        });
+        btn = findViewById(R.id.btnConversores);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent newIntent = new Intent(MainActivity.this, conversores.class);
+
+                tempVal = findViewById(R.id.txtNum1);
+                String num1 = tempVal.getText().toString();
+
+                newIntent.putExtra("num1", num1);
+                startActivity(newIntent);
             }
         });
     }

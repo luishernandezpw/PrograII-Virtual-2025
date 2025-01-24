@@ -82,5 +82,11 @@
         android:layout_marginTop="400dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    8
+
+    <Button
+        android:id="@+id/btnConversores"
+        android:text="COnversores"
+        android:layout_marginTop="500dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>
