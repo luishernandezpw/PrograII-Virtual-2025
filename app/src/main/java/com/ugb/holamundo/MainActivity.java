@@ -34,22 +34,6 @@ public class MainActivity extends Activity {
                     Double num2 = Double.parseDouble(tempVal.getText().toString());
                     double respuesta = 0.0;
 
-                    opt = findViewById(R.id.optSuma);
-                    if (opt.isChecked()) {
-                        respuesta = num1 + num2;
-                    }
-                    opt = findViewById(R.id.optResta);
-                    if (opt.isChecked()) {
-                        respuesta = num1 - num2;
-                    }
-                    opt = findViewById(R.id.optMultiplicacion);
-                    if (opt.isChecked()) {
-                        respuesta = num1 * num2;
-                    }
-                    opt = findViewById(R.id.optDivision);
-                    if (opt.isChecked()) {
-                        respuesta = num1 / num2;
-                    }
                     tempVal = findViewById(R.id.lblRespuesta);
                     tempVal.setText("Respuesta: " + String.format("%.2f", respuesta) );
 
@@ -57,19 +41,6 @@ public class MainActivity extends Activity {
                     tempVal = findViewById(R.id.lblRespuesta);
                     tempVal.setText("error: " + e.getMessage());
                 }
-            }
-        });
-        btn = findViewById(R.id.btnConversores);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newIntent = new Intent(MainActivity.this, conversores.class);
-
-                tempVal = findViewById(R.id.txtNum1);
-                String num1 = tempVal.getText().toString();
-
-                newIntent.putExtra("num1", num1);
-                startActivity(newIntent);
             }
         });
     }
