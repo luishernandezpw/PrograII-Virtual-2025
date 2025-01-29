@@ -4,76 +4,50 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Space;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends Activity {
-    Button btn;
     TextView tempVal;
     Spinner spn;
+    String[][] municipios = new String[][]{
+            new String[]{"La Union", "Santa Rosa de Lima", "Anamoros", "Bolivar"}, //La union
+            new String[]{"San Francisco Gotera", "Arambala", "Cacaopera", "Chilanga", "Corinto"}, //Morazan
+            new String[]{"San Miguel", "Carolina", "Chinameca", "El Transito"}, //San Miguel
+            new String[]{"Usulutan", "Santa Maria", "Berlin", "Santiago de Maria", "Santa Elena"}, //Usulutan
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btn = findViewById(R.id.btnCalcular);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    tempVal = findViewById(R.id.txtNum1);
-                    Double num1 = Double.parseDouble(tempVal.getText().toString());
-
-                    tempVal = findViewById(R.id.txtNum2);
-                    Double num2 = Double.parseDouble(tempVal.getText().toString());
-                    double respuesta = 0.0;
-
-                    spn = findViewById(R.id.cboOpciones);
-                    switch (spn.getSelectedItemPosition()){
-                        case 0:
-                            respuesta = num1 + num2;
-                            break;
-                        case 1:
-                            respuesta = num1 - num2;
-                            break;
-                        case 2:
-                            respuesta = num1 * num2;
-                            break;
-                        case 3:
-                            respuesta = num1 / num2;
-                            break;
-                        case 4:
-                            respuesta = Math.pow(num1, num2);
-                            break;
-                        case 5:
-                            respuesta = num1 * num2/100;
-                            break;
-                        case 6:
-                            respuesta = Math.pow(num1, 1/num2);//raiz, cuadrada, cubica, cuarta, etc...
-                            break;
-                        case 7:
-                            //5! = 5*4*3*2=120
-                            respuesta = 1;
-                            for(int i = 2; i<=num1; i++){
-                                respuesta *=i;
-                            }
-                            break;
-                    }
-                    tempVal = findViewById(R.id.lblRespuesta);
-                    tempVal.setText("Respuesta: " + String.format("%.2f", respuesta) );
-
-                }catch (Exception e){
-                    tempVal = findViewById(R.id.lblRespuesta);
-                    tempVal.setText("error: " + e.getMessage());
+        try {
+            spn = findViewById(R.id.cboDepto);
+            spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    ArrayAdapter<String> aaMun = new ArrayAdapter<>(MainActivity.this,
+                            android.R.layout.simple_spinner_item, municipios[position]);
+                    spn = findViewById(R.id.cboMun);
+                    spn.setAdapter(aaMun);
                 }
-            }
-        });
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        }catch (Exception e){
+            Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 }
