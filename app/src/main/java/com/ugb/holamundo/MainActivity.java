@@ -49,6 +49,22 @@ public class MainActivity extends Activity {
                         case 3:
                             respuesta = num1 / num2;
                             break;
+                        case 4:
+                            respuesta = Math.pow(num1, num2);
+                            break;
+                        case 5:
+                            respuesta = num1 * num2/100;
+                            break;
+                        case 6:
+                            respuesta = Math.pow(num1, 1/num2);//raiz, cuadrada, cubica, cuarta, etc...
+                            break;
+                        case 7:
+                            //5! = 5*4*3*2=120
+                            respuesta = 1;
+                            for(int i = 2; i<=num1; i++){
+                                respuesta *=i;
+                            }
+                            break;
                     }
                     tempVal = findViewById(R.id.lblRespuesta);
                     tempVal.setText("Respuesta: " + String.format("%.2f", respuesta) );
