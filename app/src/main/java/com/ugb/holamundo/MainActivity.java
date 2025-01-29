@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Space;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -15,8 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends Activity {
     Button btn;
     TextView tempVal;
-    RadioGroup rgb;
-    RadioButton opt;
+    Spinner spn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +35,21 @@ public class MainActivity extends Activity {
                     Double num2 = Double.parseDouble(tempVal.getText().toString());
                     double respuesta = 0.0;
 
+                    spn = findViewById(R.id.cboOpciones);
+                    switch (spn.getSelectedItemPosition()){
+                        case 0:
+                            respuesta = num1 + num2;
+                            break;
+                        case 1:
+                            respuesta = num1 - num2;
+                            break;
+                        case 2:
+                            respuesta = num1 * num2;
+                            break;
+                        case 3:
+                            respuesta = num1 / num2;
+                            break;
+                    }
                     tempVal = findViewById(R.id.lblRespuesta);
                     tempVal.setText("Respuesta: " + String.format("%.2f", respuesta) );
 
