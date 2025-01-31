@@ -20,11 +20,18 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends Activity {
     TextView tempVal;
     Spinner spn;
-    String[][] municipios = new String[][]{
-            new String[]{"La Union", "Santa Rosa de Lima", "Anamoros", "Bolivar"}, //La union
-            new String[]{"San Francisco Gotera", "Arambala", "Cacaopera", "Chilanga", "Corinto"}, //Morazan
-            new String[]{"San Miguel", "Carolina", "Chinameca", "El Transito"}, //San Miguel
-            new String[]{"Usulutan", "Santa Maria", "Berlin", "Santiago de Maria", "Santa Elena"}, //Usulutan
+    Button btn;
+    String[][] etiquetas = new String[][]{
+            new String[]{"Dolar", "Euro", "Quetzalez", "Lempiras", "Cordobas", "Pesos CR"}, //MOnedas
+            new String[]{"Dia", "Segundo", "Minutos", "Hora", "Semana", "Mes", "Año"}, //Tiempo
+            new String[]{"GB", "Bit", "Byte", "KB", "MB", "TB"}, //Almacenamiento
+            new String[]{}, //Longitud
+    };
+    double[][] valores = new double[][]{
+            new double[]{1, 0.96, 7.73, 25.60, 36.78, 506.78},
+            new double[]{1, 86400, 1440, 24, 0.142857, 0.0328767, 0.00273973},
+            new double[]{1, 8e+9, 1e+9, 1e+6, 1000, 0.001},
+            new double[]{}
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,22 +39,51 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         try {
-            spn = findViewById(R.id.cboDepto);
+            spn = findViewById(R.id.cboTipoCOnversor);
             spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    ArrayAdapter<String> aaMun = new ArrayAdapter<>(MainActivity.this,
-                            android.R.layout.simple_spinner_item, municipios[position]);
-                    spn = findViewById(R.id.cboMun);
-                    spn.setAdapter(aaMun);
+                    ArrayAdapter<String> aaEtiquetas = new ArrayAdapter<>(MainActivity.this,
+                            android.R.layout.simple_spinner_item, etiquetas[position]);
+                    spn = findViewById(R.id.cboa);
+                    spn.setAdapter(aaEtiquetas);
+
+                    spn = findViewById(R.id.cboDe);
+                    spn.setAdapter(aaEtiquetas);
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
 
                 }
             });
+
+            btn = findViewById(R.id.btnConvertir);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    spn = findViewById(R.id.cboTipoCOnversor);
+                    int tipo = spn.getSelectedItemPosition();
+
+                    spn = findViewById(R.id.cboDe);
+                    int de = spn.getSelectedItemPosition();
+
+                    spn = findViewById(R.id.cboa);
+                    int a = spn.getSelectedItemPosition();
+
+                    tempVal = findViewById(R.id.txtCantidad);
+                    double cantidad = Double.parseDouble(tempVal.getText().toString());
+
+                    double respuesta = convertir(de, a, cantidad, tipo);
+
+                    tempVal = findViewById(R.id.lblrespuesta);
+                    tempVal.setText("Respuesta: "+ respuesta);
+                }
+            });
         }catch (Exception e){
             Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+    Double convertir (int de, int a, double cantidad, int tipo){
+        return valores[tipo][a] / valores[tipo][de] * cantidad;
     }
 }

@@ -8,33 +8,75 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/lblDepto"
-        android:text="DEPTO:"
+        android:id="@+id/lblTipoConversor"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="20dp"
+        android:text="CONVERSOR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Spinner
+        android:id="@+id/cboTipoCOnversor"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="115dp"
+        android:entries="@array/conversor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/lblDe"
+        android:text="DE:"
+        android:layout_below="@id/lblTipoConversor"
         android:layout_marginTop="60dp"
         android:layout_marginLeft="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <Spinner
-        android:id="@+id/cboDepto"
-        android:entries="@array/deptos"
+        android:id="@+id/cboDe"
+        android:layout_below="@id/lblTipoConversor"
         android:layout_marginTop="55dp"
         android:layout_marginLeft="80dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/lblMun"
-        android:text="MUN:"
-        android:layout_marginTop="120dp"
+        android:id="@+id/lbla"
+        android:text="A:"
+        android:layout_below="@id/cboDe"
+        android:layout_marginTop="60dp"
         android:layout_marginLeft="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <Spinner
-        android:id="@+id/cboMun"
-        android:layout_marginTop="115dp"
+        android:id="@+id/cboa"
+        android:layout_marginTop="60dp"
+        android:layout_below="@id/cboDe"
         android:layout_marginLeft="80dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/txtCantidad"
+        android:layout_below="@id/cboa"
+        android:layout_marginTop="40dp"
+        android:hint="Cantidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/lblrespuesta"
+        android:layout_below="@id/txtCantidad"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:text="Respuesta: ?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btnConvertir"
+        android:layout_below="@id/lblrespuesta"
+        android:layout_marginTop="40dp"
+        android:text="CONVERTIR"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </RelativeLayout>
