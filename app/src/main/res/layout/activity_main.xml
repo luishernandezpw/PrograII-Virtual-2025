@@ -48,6 +48,11 @@
         android:text="Guardar Amigos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/lblDepuracion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabRegresarlistaAmigos"
         android:layout_alignParentRight="true"

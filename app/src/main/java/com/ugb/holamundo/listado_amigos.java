@@ -17,15 +17,21 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class listado_amigos extends Activity {
+    Bundle parametros = new Bundle();
     FloatingActionButton fab;
     ListView lts;
     Cursor cursorAmigos;
-    DB db;
     amigos misAmigos;
     final ArrayList<amigos> amigosArrayList = new ArrayList<amigos>();
+    JSONArray jsonArray;
+    JSONObject jsonObject;
+    obtenerDatosServidor datosServidor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,44 +41,59 @@ public class listado_amigos extends Activity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                abrirActividad();
+                parametros.putString("accion","nuevo");
+                abrirActividad(parametros);
             }
         });
         obtenerDatosAmigos();
     }
-    private void abrirActividad(){
+    private void abrirActividad(Bundle parametros){
         Intent abrirActividad = new Intent(getApplicationContext(), MainActivity.class);
+        abrirActividad.putExtras(parametros);
         startActivity(abrirActividad);
     }
-    private void obtenerDatosAmigos(){
+    private void mostrarDatosAmigos(){
         try{
-            amigosArrayList.clear();
-
-            db = new DB(getApplicationContext(), "", null, 1);
-            cursorAmigos = db.consultar_amigos();
-
-            if( cursorAmigos.moveToFirst() ){
+            if( jsonArray.length()>0 ){
                 lts = findViewById(R.id.ltsAmigos);
-                do{
+                amigosArrayList.clear();
+
+                JSONObject misDatosJsonObject;
+                for (int i=0; i<jsonArray.length(); i++){
+                    misDatosJsonObject = jsonArray.getJSONObject(i).getJSONObject("key");
                     misAmigos = new amigos(
-                      cursorAmigos.getString(0),//idAmigo
-                      cursorAmigos.getString(1),//nombre
-                      cursorAmigos.getString(2),//direccion
-                      cursorAmigos.getString(3),//telefono
-                      cursorAmigos.getString(4),//email
-                      cursorAmigos.getString(5) //dui
+                            misDatosJsonObject.getString("_id"),//_id
+                            misDatosJsonObject.getString("_rev"),//_rev
+                            misDatosJsonObject.getString("idAmigo"),//idAmigo
+                            misDatosJsonObject.getString("nombre"),//nombre
+                            misDatosJsonObject.getString("direccion"),//direccion
+                            misDatosJsonObject.getString("telefono"),//telefono
+                            misDatosJsonObject.getString("email"), //email
+                            misDatosJsonObject.getString("dui") //email
                     );
                     amigosArrayList.add(misAmigos);
-                }while (cursorAmigos.moveToNext());
+                }
                 adaptadorAmigos adaterAmigos = new adaptadorAmigos(listado_amigos.this, amigosArrayList);
                 lts.setAdapter(adaterAmigos);
                 registerForContextMenu(lts);
             }else{
                 mostrarMsg("No hay datos que mostrar...");
-                abrirActividad();
+                parametros.putString("accion","nuevo");
+                abrirActividad(parametros);
             }
         }catch (Exception e){
-            mostrarMsg(e.getMessage());
+            mostrarMsg("Error al mostrar: "+e.getMessage());
+        }
+    }
+    private void obtenerDatosAmigos(){
+        try{
+            datosServidor = new obtenerDatosServidor();
+            String datos = datosServidor.execute().get();
+            jsonObject = new JSONObject(datos);
+            jsonArray = jsonObject.getJSONArray("rows");
+            mostrarDatosAmigos();
+        }catch (Exception e){
+            mostrarMsg("Error al intentar obtener datos desde el servidor: "+ e.getMessage());
         }
     }
     void mostrarMsg(String msg){

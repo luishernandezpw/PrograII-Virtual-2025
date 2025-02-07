@@ -19,10 +19,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONObject;
+
 public class MainActivity extends Activity {
     Button btn;
     TextView tempVal;
     FloatingActionButton fab;
+    utilidades utls;
+    String id="", rev="", idAmigo="1", accion="nuevo";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,28 +48,51 @@ public class MainActivity extends Activity {
         });
     }
     void guardarAmigos(){
-        tempVal = findViewById(R.id.txtnombre);
-        String nombre = tempVal.getText().toString();
+        try {
+            tempVal = findViewById(R.id.txtnombre);
+            String nombre = tempVal.getText().toString();
 
-        tempVal = findViewById(R.id.txtdireccion);
-        String direccion = tempVal.getText().toString();
+            tempVal = findViewById(R.id.txtdireccion);
+            String direccion = tempVal.getText().toString();
 
-        tempVal = findViewById(R.id.txttelefono);
-        String telefono = tempVal.getText().toString();
+            tempVal = findViewById(R.id.txttelefono);
+            String telefono = tempVal.getText().toString();
 
-        tempVal = findViewById(R.id.txtemail);
-        String email = tempVal.getText().toString();
+            tempVal = findViewById(R.id.txtemail);
+            String email = tempVal.getText().toString();
 
-        tempVal = findViewById(R.id.txtdui);
-        String dui = tempVal.getText().toString();
+            tempVal = findViewById(R.id.txtdui);
+            String dui = tempVal.getText().toString();
 
-        DB db = new DB(getApplicationContext(), "", null, 1);
-        String resp = db.administrar_amigos("nuevo", new String[]{
-                "",nombre, direccion, telefono, email, dui
-        });
-        if( resp.equals("ok") ){
-            mostrarMsg("Amigo almacenado con exito...");
-            regresarListaAmigos();
+            JSONObject datosAmigos = new JSONObject();
+            if (accion.equals("modificar")) {
+                datosAmigos.put("_id", id);
+                datosAmigos.put("_rev", rev);
+            }
+            datosAmigos.put("idAmigo", idAmigo);
+            datosAmigos.put("nombre", nombre);
+            datosAmigos.put("direccion", direccion);
+            datosAmigos.put("telefono", telefono);
+            datosAmigos.put("email", email);
+            datosAmigos.put("dui", dui);
+
+            //enviar los datos al servidor.
+            enviarDatosServidor objEnviarDatosServidor = new enviarDatosServidor(getApplicationContext());
+            String respuesta = objEnviarDatosServidor.execute(datosAmigos.toString()).get();
+
+            JSONObject respuestaJsonObject = new JSONObject(respuesta);
+            if (respuestaJsonObject.getBoolean("ok")) {
+                id = respuestaJsonObject.getString("id");
+                rev = respuestaJsonObject.getString("rev");
+                mostrarMsg("Amigo almacenado con exito...");
+                regresarListaAmigos();
+            }else{
+                mostrarMsg("Error al intentar guardar datos de amigos"+ respuesta);
+            }
+        }catch (Exception e){
+            tempVal = findViewById(R.id.lblDepuracion);
+            tempVal.setText(e.getMessage());
+            mostrarMsg("Error: "+e.getMessage());
         }
     }
     void regresarListaAmigos(){
