@@ -26,12 +26,13 @@ public class MainActivity extends Activity {
     TextView tempVal;
     FloatingActionButton fab;
     utilidades utls;
-    String id="", rev="", idAmigo="1", accion="nuevo";
+    String id="", rev="", idAmigo="", accion="nuevo";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        utls = new utilidades();
         btn = findViewById(R.id.btnGuardarAmigos);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +47,40 @@ public class MainActivity extends Activity {
                 regresarListaAmigos();
             }
         });
+        mostrarDatosAmigos();
+    }
+    void mostrarDatosAmigos(){
+        try {
+            Bundle parametros = getIntent().getExtras();
+            accion = parametros.getString("accion");
+            if (accion.equals("modificar")) {
+                JSONObject datosAmigos = new JSONObject(parametros.getString("amigos")).getJSONObject("key");
+                id = datosAmigos.getString("_id");
+                rev = datosAmigos.getString("_rev");
+                idAmigo = datosAmigos.getString("idAmigo");
+
+                tempVal = findViewById(R.id.txtnombre);
+                tempVal.setText(datosAmigos.getString("nombre"));
+
+                tempVal = findViewById(R.id.txtdireccion);
+                tempVal.setText(datosAmigos.getString("direccion"));
+
+                tempVal = findViewById(R.id.txttelefono);
+                tempVal.setText(datosAmigos.getString("telefono"));
+
+                tempVal = findViewById(R.id.txtemail);
+                tempVal.setText(datosAmigos.getString("email"));
+
+                tempVal = findViewById(R.id.txtdui);
+                tempVal.setText(datosAmigos.getString("dui"));
+            }else{
+                idAmigo = utls.generarUnicoId();
+            }
+        }catch (Exception e){
+            tempVal = findViewById(R.id.lblDepuracion);
+            tempVal.setText(e.getMessage());
+            mostrarMsg("Error al mostrar datos: "+e.getMessage());
+        }
     }
     void guardarAmigos(){
         try {
@@ -78,7 +113,7 @@ public class MainActivity extends Activity {
 
             //enviar los datos al servidor.
             enviarDatosServidor objEnviarDatosServidor = new enviarDatosServidor(getApplicationContext());
-            String respuesta = objEnviarDatosServidor.execute(datosAmigos.toString()).get();
+            String respuesta = objEnviarDatosServidor.execute(datosAmigos.toString(), "POST", utilidades.url_mto).get();
 
             JSONObject respuestaJsonObject = new JSONObject(respuesta);
             if (respuestaJsonObject.getBoolean("ok")) {

@@ -30,13 +30,15 @@ public class enviarDatosServidor extends AsyncTask<String, String, String> {
     protected String doInBackground(String... parametros) {
         String jsonResponse = null;
         String jsonDatos = parametros[0];
+        String metodo = parametros[1];
+        String _url = parametros[2];
         BufferedReader bufferedReader;
         try{
-            URL url = new URL(utilidades.url_mto);
+            URL url = new URL(_url);
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setDoInput(true);
             httpURLConnection.setDoOutput(true);
-            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setRequestMethod(metodo);
             httpURLConnection.setRequestProperty("Content-Type","application/json");
             httpURLConnection.setRequestProperty("Accept", "application/json");
             httpURLConnection.setRequestProperty("Authorization", "Basic "+utilidades.credencialesCodificadas);

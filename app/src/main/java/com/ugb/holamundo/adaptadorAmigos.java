@@ -33,7 +33,7 @@ public class adaptadorAmigos extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return Long.parseLong(amigosArrayList.get(position).getIdAmigo());
+        return Long.parseLong(position+"");
     }
 
     @Override
